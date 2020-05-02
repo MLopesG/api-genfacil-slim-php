@@ -27,6 +27,25 @@ $app->group('/contratos',function(){
         return $response->withJson($result);
     });
 
+    $this->get('/options', function($request, $response){
+
+        $data = [
+            'clientes' => $this->db->table('cliente')->select('id_cliente','nome_cliente')->get(),
+            'vendedores' => $this->db->table('vendedor')->select('id_vendedor','nome_vendedor')->get(),
+            'veiculos' => $this->db->table('veiculo')->select('id_veiculo','nome_veiculo')->get(),
+            'servicos' => $this->db->table('servico')->select('id_servico','tipo_servico')->get(),
+            'pacotes' => $this->db->table('pacote')->select('id_pacote','nome_pacote')->get()
+        ];
+
+        $result = [
+            'success'=> true,
+            'message'=>'',
+            'data'=> $data
+        ];
+
+        return $response->withJson($result);
+    });
+
     $this->get('/{id}', function($request, $response, $arg){
 
         $contrato = $this->db->table('pagamento')

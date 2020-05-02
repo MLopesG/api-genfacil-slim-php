@@ -31,6 +31,19 @@ $app->group('/veiculos',function(){
         ->where('id_veiculo',$arg['id'])
         ->get();
 
+        $manuntencoes = $this->db->table('manuntencao')->where('id_veiculo',$arg['id'])->get();
+
+        $contratos = $this->db->table('pagamento')
+        ->join('contrato', 'contrato.id_contrato','=','pagamento.id_contrato')
+        ->join('pacote', 'contrato.id_pacote','=','pacote.id_pacote')
+        ->join('vendedor', 'contrato.id_vendedor','=','vendedor.id_vendedor')
+        ->join('cliente', 'contrato.id_cliente','=','cliente.id_cliente')
+        ->join('servico', 'contrato.id_servico','=','servico.id_servico')
+        ->join('veiculo', 'veiculo.id_veiculo','=','contrato.id_veiculo')
+        ->join('tipo_veicullo', 'tipo_veicullo.id_tipo_veiculo','=','veiculo.id_tipo_veiculo')
+        ->where('veiculo.id_veiculo',$arg['id'])
+        ->get();
+
         $result = [
             'success'=> true,
             'message'=>''
@@ -40,7 +53,10 @@ $app->group('/veiculos',function(){
             $result['message'] = 'Desculpe, veiculo não encontrado!';
             $result['success'] = false;
         }else{
+            $result['message'] = count($contratos) . ' - Contratos fechados, ' .count($manuntencoes) . ' - Manuntenções realizadas';
             $result['veiculo'] = $veiculo;
+            $result['manuntencoes'] = $manuntencoes;
+            $result['contratos'] = $contratos;
         }
 
         return $response->withJson($result);

@@ -22,6 +22,7 @@ return function (App $app) {
     require __DIR__ .'/routes/empresas.php'; 
     require __DIR__ .'/routes/cidades.php'; 
     require __DIR__ .'/routes/contratos.php'; 
+    require __DIR__ .'/routes/clientes.php'; 
     require __DIR__ .'/routes/index.php'; 
 };
 

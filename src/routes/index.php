@@ -24,14 +24,16 @@ $app->group('/',function(){
                     ->join('vendedor', 'contrato.id_vendedor','=','vendedor.id_vendedor')
                     ->join('cliente', 'contrato.id_cliente','=','cliente.id_cliente')
                     ->get(),
-                    "manuntencos" => $this->db->table('manuntencao')->orderBy('id_manuntencao','desc')->limit(5)->get(),
+                    "manuntencos" => $this->db->table('manuntencao')->orderBy('id_manuntencao','desc')
+                    ->join('veiculo','veiculo.id_veiculo','=','manuntencao.id_veiculo')
+                    ->limit(5)->get(),
                     "clientes" => $this->db->table('cliente')->orderBy('id_cliente','desc')->limit(5)->get(),
                     "servicos" => $this->db->table('servico')->orderBy('id_servico','desc')->limit(5)->get()
                 ]
             ]
         ];
 
-        $result['message'] = "Painel Administrativos, últimas atualizações de informações(Contratos, Manuntenções, Clientes e Serviços)";
+        $result['message'] = "Painel Administrativos, últimas atualizações de informações(Contratos, Manuntenções, Clientes e Serviços).";
 
         return $response->withJson($result);
     });
