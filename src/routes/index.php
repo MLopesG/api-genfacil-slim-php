@@ -29,7 +29,7 @@ $app->group('/',function(){
                     ->limit(5)->get(),
                     "clientes" => $this->db->table('cliente')->orderBy('id_cliente','desc')->limit(5)->get(),
                     "servicos" => $this->db->table('servico')->orderBy('id_servico','desc')->limit(5)->get(),
-                    "veiculos" => $this->db->table('veiculo')->limit(3)->get()
+                    "veiculos" => $this->db->table('veiculo')->orderBy('id_veiculo','desc')->limit(5)->get()
                 ]
             ]
         ];
