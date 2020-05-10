@@ -9,6 +9,10 @@ if (PHP_SAPI == 'cli-server') {
     }
 }
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, PUT, PATCH, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: *');
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();

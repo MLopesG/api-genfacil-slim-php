@@ -5,28 +5,30 @@ use Slim\Http\Response;
 
 $app->group('/',function(){
     $this->get('', function($request, $response){
-
-        $vendedores = $this->db->table('vendedor')->get();
-
         $result = [
             'success'=> true,
             'message'=>'',
             'painel'=> [
                 "counts" => [
-                    "contratos" =>( $this->db->table('contrato')->count()),
-                    "manuntencos" => $this->db->table('manuntencao')->count(),
+                    "manuntencoes" => $this->db->table('manuntencao')->count(),
                     "clientes" => $this->db->table('cliente')->count(),
-                    "servicos" => $this->db->table('servico')->count()
+                    "pacotes_vendidos_contratos" => $this->db->table('pagamento')
+                        ->join('contrato', 'contrato.id_contrato','=','pagamento.id_contrato')
+                        ->join('pacote', 'contrato.id_pacote','=','pacote.id_pacote')
+                        ->count(),
+                    "faturamento_contratos" => $this->db->table('contrato')->orderBy('id_veiculo','desc')->limit(5)->sum('valor_contrato'),
+                    "veiculos" => $this->db->table('veiculo')->count()
                 ],
                 "data"=>[
                     "contratos" => $this->db->table('pagamento')
-                    ->join('contrato', 'contrato.id_contrato','=','pagamento.id_contrato')
-                    ->join('vendedor', 'contrato.id_vendedor','=','vendedor.id_vendedor')
-                    ->join('cliente', 'contrato.id_cliente','=','cliente.id_cliente')
-                    ->get(),
+                        ->join('contrato', 'contrato.id_contrato','=','pagamento.id_contrato')
+                        ->join('vendedor', 'contrato.id_vendedor','=','vendedor.id_vendedor')
+                        ->join('cliente', 'contrato.id_cliente','=','cliente.id_cliente')
+                        ->get(),
                     "manuntencos" => $this->db->table('manuntencao')->orderBy('id_manuntencao','desc')
-                    ->join('veiculo','veiculo.id_veiculo','=','manuntencao.id_veiculo')
-                    ->limit(5)->get(),
+                        ->join('veiculo','veiculo.id_veiculo','=','manuntencao.id_veiculo')
+                        ->limit(5)
+                        ->get(),
                     "clientes" => $this->db->table('cliente')->orderBy('id_cliente','desc')->limit(5)->get(),
                     "servicos" => $this->db->table('servico')->orderBy('id_servico','desc')->limit(5)->get(),
                     "veiculos" => $this->db->table('veiculo')->orderBy('id_veiculo','desc')->limit(5)->get()
